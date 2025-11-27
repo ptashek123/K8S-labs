@@ -1,0 +1,111 @@
+replicaCount: 3
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "1.23"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+labels:
+  environment: production
+  team: backend
+
+extraLabels:
+  enabled: true
+  custom:
+    project: "university"
+    course: "kuberetes"
+    semester: "spring"
+
+environmentVariables:
+  - name: "APP_ENV"
+    value: "production"
+  - name: "APP_DEBUG"
+    value: "false"
+  - name: "LOG_LEVEL"
+    value: "info"
+
+global:
+  labels:
+    environment: production
+    team: backend
+
+serviceAccount:
+  create: true
+  automount: true
+  annotations: {}
+  name: "student"
+
+podAnnotations: {}
+
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8080
+  targetPort: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+  - name: gateway
+    sectionName: http
+  hostnames:
+  - chart-example.local
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /headers
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+livenessProbe:
+  httpGet:
+    path: /
+    port: http
+readinessProbe:
+  httpGet:
+    path: /
+    port: http
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -1,0 +1,40 @@
+replicaCount: 1
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "1.23"
+
+environment: "development"
+
+config:
+  logLevel: "debug"
+  debug: true
+  cacheEnabled: false
+  database:
+    host: "localhost"
+    port: "5432"
+    name: "app_dev"
+
+environmentVariables:
+  - name: "APP_ENV"
+    value: "development"
+  - name: "LOG_LEVEL"
+    value: "debug"
+  - name: "DEBUG"
+    value: "true"
+
+extraLabels:
+  enabled: true
+  custom:
+    environment: "development"
+    tier: "backend"
+    version: "dev-latest"
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi

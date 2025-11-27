@@ -1,0 +1,40 @@
+replicaCount: 3
+
+image:
+  repository: nginx
+  pullPolicy: IfNotPresent
+  tag: "1.23"
+
+environment: "production"
+
+config:
+  logLevel: "info"
+  debug: false
+  cacheEnabled: true
+  database:
+    host: "db-prod.cluster.local"
+    port: "5432"
+    name: "app_prod"
+
+environmentVariables:
+  - name: "APP_ENV"
+    value: "production"
+  - name: "LOG_LEVEL"
+    value: "info"
+  - name: "DEBUG"
+    value: "false"
+
+extraLabels:
+  enabled: true
+  custom:
+    environment: "production"
+    tier: "backend"
+    version: "v1.0.0"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
